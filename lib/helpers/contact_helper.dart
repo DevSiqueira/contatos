@@ -41,6 +41,7 @@ class ContactHelper{
     });
   }
 
+  //funcao para salvar o contato
   Future<Contact>saveContact(Contact contact) async {
     Database dbContact = await db;
     contact.id = await dbContact.insert(contactTable, contact.toMap());
@@ -55,7 +56,44 @@ class ContactHelper{
     whereArgs: [id]);
     if(maps.length > 0){
       return Contact.fromMap(maps.first);
+    } else {
+      return null;
     }
+  }
+
+  //funcao para deletar o contato
+  Future<int> deleteContact(int id) async {
+    Database dbContact = await db;
+    return await dbContact.delete(contactTable, where: "$idColumn = ?", whereArgs: [id]);
+  }
+
+  //funcao para atualizar o contato
+  Future<int> updateContact(Contact contact) async {
+    Database dbContact = await db;
+    return await dbContact.update(contactTable, contact.toMap(), where: "$idColumn = ?", whereArgs: [contact.id]);
+  }
+
+  //Funcao para obter todos os contatos
+  Future<List> getAllContacts() async {
+    Database dbContact = await db;
+    List listMap = await dbContact.rawQuery("SELECT * FROM $contactTable");
+    List<Contact> listContact = List();
+    for (Map m in listMap){
+      listContact.add(Contact.fromMap(m));
+    }
+    return listContact;
+  }
+
+  //funcao para obter o numero de contatos da lista
+  Future<int> getNumber() async{
+    Database dbContact = await db;
+    return Sqflite.firstIntValue(await dbContact.rawQuery("SELECT COUNT (*) FROM $contactTable"));
+  }
+
+  //funcao para fechar o banco de dados
+  Future close() async {
+    Database dbContact = await db;
+    dbContact.close();
   }
 
 }
