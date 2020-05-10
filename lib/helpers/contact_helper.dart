@@ -1,14 +1,45 @@
 import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'dart:async';
 
 // o final serve para garantir que o valor nao poderá ser modificado
+final String contactTable = "contactTable";
 final String idColumn = "idColumn";
 final String nameColumn = "nameColumn";
 final String emailColumn = "emailColumn";
 final String phoneColumn = "Column";
 final String imgColumn = "Column";
 
+//declarando a classe
 class ContactHelper{
+  static final ContactHelper _instance = ContactHelper.internal();
 
+  factory ContactHelper() => _instance;
+
+  ContactHelper.internal();
+
+  Database _db;
+
+  Future<Database> get db async {
+    if(_db != null){
+      return _db;
+    } else {
+      _db = await initDb();
+      return _db;
+    }
+  }
+
+  Future<Database> initDb() async {
+    final databasesPath = await getDatabasesPath();
+    final path = join(databasesPath, "contacts.db");
+
+    return await openDatabase(path, version: 1, onCreate: (Database db, int newerVErsion) async {
+      await db.execute(
+        "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT"
+            "$phoneColumn TEXT, $imgColumn TEXT)"
+      );
+    });
+  }
 }
 
 //classe contato será o molde
