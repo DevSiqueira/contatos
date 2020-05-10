@@ -31,11 +31,11 @@ class ContactHelper{
 
   Future<Database> initDb() async {
     final databasesPath = await getDatabasesPath();
-    final path = join(databasesPath, "contacts.db");
+    final path = join(databasesPath, "contactsnew.db");
 
     return await openDatabase(path, version: 1, onCreate: (Database db, int newerVErsion) async {
       await db.execute(
-        "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT"
+        "CREATE TABLE $contactTable($idColumn INTEGER PRIMARY KEY, $nameColumn TEXT, $emailColumn TEXT,"
             "$phoneColumn TEXT, $imgColumn TEXT)"
       );
     });
@@ -106,6 +106,7 @@ class Contact{
   String email;
   String phone;
   String img;
+
 
   Contact.fromMap(Map map){
     id = map[idColumn];
