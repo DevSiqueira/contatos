@@ -1,6 +1,7 @@
 import 'dart:io';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:contatos/helpers/contact_helper.dart';
+import 'package:contatos/ui/contact_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
