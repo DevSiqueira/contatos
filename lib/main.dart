@@ -5,7 +5,7 @@ import 'package:contatos/ui/home_page.dart';
 
 void main(){
   runApp(MaterialApp(
-    home: ContactPage(),
+    home: HomePage(),
     debugShowCheckedModeBanner: false,
   ));
 }

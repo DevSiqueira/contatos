@@ -20,11 +20,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    helper.getAllContacts().then((list){
-      setState(() {
-        contacts = list;
-      });
-    });
+    _getAllContacts();
   }
 
   @override
@@ -37,7 +33,9 @@ class _HomePageState extends State<HomePage> {
       ),
       backgroundColor: Color(0xFF070A0D),
       floatingActionButton: FloatingActionButton(
-        onPressed: (){},
+        onPressed: (){
+          _showContactPage();
+        },
         child: Icon(Icons.add),
         backgroundColor: Color(0xFF384D64),
       ),
@@ -67,6 +65,7 @@ class _HomePageState extends State<HomePage> {
                       image: contacts[index].img != null ? 
                           FileImage(File(contacts[index].img)) : 
                           AssetImage("images/person.png")
+
                   ),
                 ),
               ),
@@ -75,14 +74,14 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(contacts[index.name].name ?? "",
+                    Text(contacts[index].name ?? "",
                     style: TextStyle(fontSize: 22.0,
                       fontWeight: FontWeight.bold),
                     ),
-                    Text(contacts[index.name].email ?? "",
+                    Text(contacts[index].email ?? "",
                       style: TextStyle(fontSize: 18.0),
                     ),
-                    Text(contacts[index.name].phone ?? "",
+                    Text(contacts[index].phone ?? "",
                       style: TextStyle(fontSize: 18.0),
                     ),
                   ],
@@ -92,7 +91,33 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
+      onTap: (){
+        _showContactPage(contact: contacts[index]);
+      },
     );
   }
 
+
+  void _showContactPage({Contact contact}) async {
+    final recContact = await Navigator.push(context,
+    MaterialPageRoute(builder: (context) => ContactPage(contact: contact))
+    );
+
+    if(recContact != null){
+      if(contact != null){
+        await helper.updateContact(recContact);
+      } else {
+        await helper.saveContact(recContact);
+      }
+      _getAllContacts();
+    }
+  }
+
+  void _getAllContacts(){
+    helper.getAllContacts().then((list){
+      setState(() {
+        contacts = list;
+      });
+    });
+  }
 }
