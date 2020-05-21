@@ -6,7 +6,6 @@ import 'dart:io';
 import 'dart:async';
 
 class ContactPage extends StatefulWidget {
-
   final Contact contact;
 
   //esse construtor vai servir para passar o contato que eu quero editado
@@ -32,7 +31,7 @@ class _ContactPageState extends State<ContactPage> {
   void initState() {
     super.initState();
 
-    if(widget.contact == null){
+    if(widget.contact == null) { //widget pra acessar atributos de outra classe
       _editedContact = Contact();
     } else {
       _editedContact = Contact.fromMap(widget.contact.toMap());
@@ -77,7 +76,8 @@ class _ContactPageState extends State<ContactPage> {
                     image: DecorationImage(
                         image: _editedContact.img != null ?
                         FileImage(File(_editedContact.img)) :
-                        AssetImage("images/person.png")
+                        AssetImage("images/person.png"),
+                        fit: BoxFit.cover
                     ),
                   ),
                 ),
