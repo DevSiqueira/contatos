@@ -113,8 +113,9 @@ class _HomePageState extends State<HomePage> {
                     style: TextStyle(color: Colors.red, fontSize: 20.0),
                   ),
                   onPressed: (){
+                    launch("tel: ${contacts[index].phone}");
                   },
-                ),
+                 ),
                 ),
                 Padding(padding: EdgeInsets.all(10.0),
                   child: FlatButton(
